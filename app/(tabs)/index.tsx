@@ -1,48 +1,73 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import React from "react";
+import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title" style={styles.welcomeText}>Welcome to our Space!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-    </ParallaxScrollView>
-  );
-}
+const Home = () => {
+    const [amount, setAmount] = React.useState('');
+    const [result, setResult] = React.useState('');
+
+    const handleConvert = () => {
+        if (amount === '') {
+            Alert.alert('Please enter a number');
+            return;
+        }
+        const convertedAmount = parseFloat(amount) * 0.85;
+        setResult(convertedAmount.toFixed(2));
+        Alert.alert('Conversion Result', `Converted Amount :  €${convertedAmount.toFixed(2)}`);
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.label}>Enter Amount (USD):</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Enter Amount"
+                value={amount}
+                onChangeText={(text) => setAmount(text)}
+                keyboardType="numeric"
+            />
+            <TouchableOpacity style={styles.button} onPress={handleConvert}>
+                <Text style={styles.buttonText}>Convert</Text>
+            </TouchableOpacity>
+            {result && <Text style={styles.result}>€{result}</Text>}
+        </View>
+    );
+};
+
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 20,
-  },
-  welcomeText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-    marginBottom: 20,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+    },
+    label: {
+        fontSize: 18,
+        marginBottom: 10,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#000',
+        borderRadius: 5,
+        width: '80%',
+        padding: 10,
+        marginBottom: 20,
+    },
+    button: {
+        backgroundColor: '#000',
+        padding: 15,
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+    result: {
+        marginTop: 20,
+        fontSize: 18,
+        color: '#333',
+    },
 });
+
+
+export default Home;
